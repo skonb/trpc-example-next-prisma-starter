@@ -16,7 +16,24 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    
+    services:
+      postgres:
+        # PostgresのDocker imageを使用
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_NAME: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        # Postgresより先にGOが起動しないようヘルスチェックを使って起動順を制御
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -24,7 +41,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    
     - run: yarn install
     - run: yarn build
     - run: yarn test-unit
