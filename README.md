@@ -1,3 +1,6 @@
+このレポジトリは `https://github.com/trpc/trpc/tree/next/examples/next-prisma-starter`を複製・改変したものです。
+
+
 # Prisma + tRPC
 
 ## Features
